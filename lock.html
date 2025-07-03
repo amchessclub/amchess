@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Gate</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0b1228;
+      overflow: hidden;
+      color: #e0e0f0;
+    }
+
+    /* Chess piece animation background */
+    .animated-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+   .piece {
+  position: absolute;
+  font-size: 48px;
+  color: rgba(72, 148, 240, 0.89);
+  animation: floatPiece 2s linear infinite;
+  text-shadow: 0 0 4px rgba(69, 92, 117, 0.482);
+  pointer-events: none;
+}
+
+    @keyframes floatPiece {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      20% { opacity: 1; }
+      100% {
+        transform: translateY(-200vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* Overlay with blur */
+    .overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(5px);
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    /* Container */
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 40px rgba(0, 180, 255, 0.25);
+      text-align: center;
+      z-index: 10;
+      animation: fadeInSlide 2s ease;
+    }
+
+    @keyframes fadeInSlide {
+      0% { opacity: 0; transform: translate(-50%, -60%); }
+      100% { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    h2 {
+      color: #00ccff;
+      text-shadow: 0 0 10px #00ccff;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00ccff, #0044ff);
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00ccff;
+      transition: transform 0.3s ease;
+    }
+    
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #nextButton {
+      margin-top: 20px;
+      display: none;
+      background: linear-gradient(135deg, #00aaff, #0066ff);
+    }
+
+    .error {
+      color: #ff4d4d;
+      height: 20px;
+      margin-top: -10px;
+    }
+
+    /* Responsive Typography */
+    @media (max-width: 480px) {
+      h2 { font-size: 20px; }
+      input[type="password"], button { font-size: 14px; padding: 10px; }
+    }
+    .back{
+        padding: 12px;
+        border-radius: 12px;
+        background-color:linear-gradient(135deg, #00ccff, #0044ff) ;
+        position: absolute;
+        bottom:3rem;
+        right: 2rem;
+        z-index: 99;
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg" id="bg"></div>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <h2>Enter Password</h2>
+    <input type="password" id="passwordInput" placeholder="Your password here...">
+    <div class="error" id="errorMsg"></div>
+    <button onclick="checkPassword()">Submit</button>
+    <a href="courses.html">
+      <button id="nextButton">Go to Lessons</button>
+    </a>
+  </div>
+   <a href="index.html"><button class="back">BACK</button></a>
+
+  <script>
+    const correctPassword = "benkaddourchess";
+    const errorMsg = document.getElementById("errorMsg");
+    const nextButton = document.getElementById("nextButton");
+
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value.trim();
+      if (input === correctPassword) {
+        nextButton.style.display = "inline-block";
+        errorMsg.textContent = "";
+      } else {
+        nextButton.style.display = "none";
+        errorMsg.textContent = "Incorrect password.";
+      }
+    }
+
+    // Generate animated chess pieces
+    const bg = document.getElementById("bg");
+    const pieces = [
+      "♞", "♛", "♝", "♜", "♟", "♚", "♘", "♙","AM.chess"
+    ];
+
+    for (let i = 0; i < 100; i++) {
+      const el = document.createElement("div");
+      el.classList.add("piece");
+      el.textContent = pieces[Math.floor(Math.random() * pieces.length)];
+      el.style.left = `${Math.random() * 100}vw`;
+      el.style.top = `${Math.random() * 100}vh`;
+      el.style.fontSize = `${Math.random() * 30 + 24}px`;
+      el.style.animationDuration = `${20 + Math.random() * 40}s`;
+      el.style.animationDelay = `${Math.random() * 10}s`;
+      bg.appendChild(el);
+    }
+  </script>
+</body>
+</html>
